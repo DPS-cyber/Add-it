@@ -56,21 +56,9 @@ header nav a:hover { color: #0D2B1D; transform: scale(1.05); }
 
 /* --- Mobile Nav Fix --- */
 @media (max-width: 768px) {
-  header {
-    justify-content: space-between;
-    padding: 15px 20px;
-  }
-  header nav {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 15px;
-    width: auto;
-  }
-  header nav a {
-    display: inline-block;
-    font-size: 15px;
-    text-align: right;
-  }
+  header { justify-content: space-between; padding: 15px 20px; }
+  header nav { flex-direction: row; flex-wrap: nowrap; gap: 15px; width: auto; }
+  header nav a { font-size: 15px; text-align: right; }
 }
 
 /* --- Sections --- */
@@ -80,6 +68,7 @@ section {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 80px 20px;
   position: relative;
+  background-attachment: fixed;
 }
 .section-light { 
   background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/bg.png'); 
@@ -92,7 +81,7 @@ section {
   background-size: cover; background-position: center; 
 }
 .section-light2 { 
-   background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/bg.png'); 
+  background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/bg.png'); 
   color: #858383; 
 }
 
@@ -107,14 +96,10 @@ h1 { margin-bottom: 50px; font-size: 3rem; text-align: center; }
   border-radius: 20px;
   overflow: hidden;
 }
-.slider-track {
-  display: flex;
-  transition: transform 1s ease;
-}
+.slider-track { display: flex; transition: transform 1s ease; }
 .slide {
   position: relative;
   flex: 0 0 100%;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -172,78 +157,39 @@ h1 { margin-bottom: 50px; font-size: 3rem; text-align: center; }
 .feature-card:hover { transform: translateY(-15px) scale(1.02); box-shadow: 0 12px 35px rgba(0,0,0,0.3); }
 .feature-card::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.35); transition: background 0.4s ease; }
 .feature-card:hover::before { background: rgba(0,0,0,0.25); }
-.feature-text { position: relative; color: #E3EFD3; text-align: center; padding: 20px; transition: transform 0.4s ease; }
+.feature-text { position: relative; color: #E3EFD3; text-align: center; padding: 20px; }
 .feature-text h2 { margin-bottom: 10px; font-size: 1.6rem; }
 .feature-text p { font-size: 1rem; }
 
-/* --- Footer --- */
-footer {
-  width: 100%;
-background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/bg.png');
-  *background: linear-gradient(45deg, #0D2B1D 0%, #6B8F71 50%, #0D2B1D 100%);
-  color: #858383; text-align: center; padding: 50px 20px;
- box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-footer a { color: #858383; text-decoration: none; transition: transform 0.3s; }
-footer a:hover { transform: scale(1.1); }
-
-/* --- Parallax --- */
-section { background-attachment: fixed; }
-
-/* --- Responsive --- */
-@media(max-width: 1200px){ h1{font-size:2.8rem;} }
-@media(max-width: 992px){ h1{font-size:2.5rem;} .slider-track img{max-height:70vh;} }
-@media(max-width: 768px){
-  h1{font-size:2.2rem;}
-  .features{flex-direction:column;gap:20px;}
-  /* Mobile slider */
-  .slide img { max-width: 95%; max-height:60vh; }
-}
-@media(max-width: 480px){
-  h1{font-size:1.8rem;margin-bottom:25px;}
-  .feature-card{padding:20px 15px;}
-  .slide img { max-width: 100%; max-height:50vh; }
-}
-.about-element {
-  margin-top: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  perspective: 1000px; /* enables subtle 3D tilt */
-}
-
+/* --- About Element --- */
+.about-element { margin-top: 60px; display: flex; justify-content: center; align-items: center; width: 100%; perspective: 1000px; }
 .about-element img {
-  width: 300px;
-  max-width: 90%;
-  border-radius: 18px;
-  opacity: 0.95;
+  width: 300px; max-width: 90%; border-radius: 18px; opacity: 0.95;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
   transform-style: preserve-3d;
   transition: transform 0.6s ease, box-shadow 0.6s ease, opacity 0.6s ease;
   animation: float 5s ease-in-out infinite, glowPulse 6s ease-in-out infinite;
 }
+@keyframes float { 0%,100%{transform:translateY(0) rotateY(0);} 50%{transform:translateY(-10px) rotateY(3deg);} }
+@keyframes glowPulse { 0%,100%{box-shadow:0 20px 45px rgba(0,0,0,0.25);opacity:0.95;} 50%{box-shadow:0 25px 60px rgba(0,0,0,0.35);opacity:1;} }
+.about-element img:hover { transform: scale(1.05) rotateY(5deg) translateY(-8px); box-shadow:0 30px 70px rgba(0,0,0,0.4); opacity:1; }
 
-/* Floating effect */
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotateY(0deg); }
-  50% { transform: translateY(-10px) rotateY(3deg); }
+/* --- Footer --- */
+footer {
+  width: 100%;
+  background-image: url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/bg.png');
+  color: #858383; text-align: center; padding: 50px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+footer a { color: #858383; text-decoration: none; transition: transform 0.3s ease, color 0.3s ease; }
+footer a:hover { transform: scale(1.1); color: #E3EFD3; }
+.footer-container { display:flex; flex-direction:column; align-items:center; gap:18px; }
 
-/* Subtle glow shimmer */
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25); opacity: 0.95; }
-  50% { box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); opacity: 1; }
-}
-
-/* Hover adds interactive response */
-.about-element img:hover {
-  transform: scale(1.05) rotateY(5deg) translateY(-8px);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
-  opacity: 1;
-}
-
-
+/* --- Responsive --- */
+@media(max-width:1200px){h1{font-size:2.8rem;}}
+@media(max-width:992px){h1{font-size:2.5rem;} .slider-track img{max-height:70vh;}}
+@media(max-width:768px){h1{font-size:2.2rem;} .features{flex-direction:column;gap:20px;} .slide img{max-width:95%;max-height:60vh;}}
+@media(max-width:480px){h1{font-size:1.8rem;margin-bottom:25px;} .feature-card{padding:20px 15px;} .slide img{max-width:100%;max-height:50vh;}}
 </style>
 </head>
 <body>
@@ -252,7 +198,7 @@ section { background-attachment: fixed; }
 
 <header>
   <div class="logo">
-    <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/web%20logo.png">
+    <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/web%20logo.png" alt="Add-it Logo">
   </div>
   <nav>
     <a href="#products">Products</a>
@@ -268,46 +214,39 @@ section { background-attachment: fixed; }
     <div class="slider-track">
       <div class="slide">
         <div class="slide-bg" style="background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/AD.png')"></div>
-        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/AD.png" alt="Product 1">
+        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/AD.png" alt="Product 1" loading="eager" fetchpriority="high">
       </div>
       <div class="slide">
         <div class="slide-bg" style="background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/blueberry.png')"></div>
-        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/blueberry.png" alt="Product 2">
+        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/blueberry.png" alt="Product 2" loading="lazy">
       </div>
       <div class="slide">
         <div class="slide-bg" style="background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/strawberry.png')"></div>
-        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/strawberry.png" alt="Product 3">
+        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/strawberry.png" alt="Product 3" loading="lazy">
       </div>
       <div class="slide">
         <div class="slide-bg" style="background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/orange.png')"></div>
-        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/orange.png" alt="Product 3">
+        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/orange.png" alt="Product 4" loading="lazy">
       </div>
       <div class="slide">
         <div class="slide-bg" style="background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/MANGO.png')"></div>
-        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/MANGO.png" alt="Product 3">
+        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/MANGO.png" alt="Product 5" loading="lazy">
       </div>
       <div class="slide">
         <div class="slide-bg" style="background-image:url('https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/LEMON.png')"></div>
-        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/LEMON.png" alt="Product 3">
+        <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/assets/LEMON.png" alt="Product 6" loading="lazy">
       </div>
     </div>
     <div class="slider-dots"></div>
   </div>
 </section>
 
-
 <section class="section-dark" id="features">
   <h1>Our Highlights</h1>
   <div class="features">
-    <div class="feature-card" style="background-image:url('');">
-      <div class="feature-text"><h2>Next Level of Quality</h2><p>Creative impactful Ads</p></div>
-    </div>
-    <div class="feature-card" style="background-image:url('');">
-      <div class="feature-text"><h2>Desired Ads</h2><p>Easy to find your desired product</p></div>
-    </div>
-    <div class="feature-card" style="background-image:url('');">
-      <div class="feature-text"><h2>Budget-Friendly</h2><p>Premium service at low price</p></div>
-    </div>
+    <div class="feature-card"><div class="feature-text"><h2>Next Level of Quality</h2><p>Creative impactful Ads</p></div></div>
+    <div class="feature-card"><div class="feature-text"><h2>Desired Ads</h2><p>Easy to find your desired product</p></div></div>
+    <div class="feature-card"><div class="feature-text"><h2>Budget-Friendly</h2><p>Premium service at low price</p></div></div>
   </div>
 </section>
 
@@ -317,14 +256,15 @@ section { background-attachment: fixed; }
     Delivering the best products blending technology, style & sustainability.
   </p>
   <div class="about-element">
-    <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/element.png" alt="Element">
+    <img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/element.png" alt="Element" loading="eager" fetchpriority="high">
   </div>
 </section>
 
-
 <footer id="contact">
-  <p>&copy; 2025 Add it Ltd. All rights reserved.</p>
-  <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+  <div class="footer-container">
+    <p>© 2025 Add-it Ltd. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+  </div>
 </footer>
 
 <script>
@@ -340,7 +280,6 @@ const dotsContainer = slider.querySelector(".slider-dots");
 let currentIndex = 0;
 let interval;
 
-// Create dots
 slides.forEach((_, i) => {
   const dot = document.createElement("span");
   if(i===0) dot.classList.add("active");
@@ -370,26 +309,30 @@ track.addEventListener("touchend",e=>{
   goToSlide(currentIndex);
 });
 
-// Parallax
+// Smooth Parallax
+let ticking = false;
 window.addEventListener("scroll",()=>{
-  document.querySelectorAll("section").forEach(section=>{
-    section.style.backgroundPositionY=-(window.scrollY*0.08)+"px";
-  });
+  if(!ticking){
+    window.requestAnimationFrame(()=>{
+      document.querySelectorAll("section").forEach(section=>{
+        section.style.backgroundPositionY=-(window.scrollY*0.08)+"px";
+      });
+      ticking=false;
+    });
+    ticking=true;
+  }
 });
-</script>
-<script>
+
+// About 3D Tilt
 const element = document.querySelector('.about-element img');
 element.addEventListener('mousemove', e => {
   const { width, height } = element.getBoundingClientRect();
-  const x = (e.offsetX / width - 0.5) * 10; // tilt factor
+  const x = (e.offsetX / width - 0.5) * 10;
   const y = (e.offsetY / height - 0.5) * 10;
   element.style.transform = `rotateY(${x}deg) rotateX(${-y}deg) scale(1.03)`;
 });
-element.addEventListener('mouseleave', () => {
-  element.style.transform = 'rotateY(0deg) rotateX(0deg) scale(1)';
-});
+element.addEventListener('mouseleave', () => { element.style.transform = 'rotateY(0deg) rotateX(0deg) scale(1)'; });
 </script>
 
 </body>
 </html>
-
