@@ -1,8 +1,9 @@
-# Add-it
-A professional website of a small scale bussiness
-# 🌟 Add-it.ltd
 
-Welcome to **Add-it.ltd** – your destination for finding impactful ads.  
+# 🌟 Add-it.ltd
+![Business Logo](https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/web%20logo.png)  
+
+Welcome to **Add-it.ltd** – your destination for finding impactful ads.
+A professional website of a small scale bussiness.
 This website is designed to showcase our offerings, connect with customers, and make browsing simple and enjoyable.
 
 ---
