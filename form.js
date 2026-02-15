@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const scriptURL = "https://script.google.com/macros/s/AKfycbwOBmOP10BrcDTooXzHQO9jgAdWYBXquocmfjh6O6NHW1SBWd-fiwNP4UMIUJtCXj4rRg/exec";
   const form = document.getElementById("contactForm");
   const formResp = document.getElementById("formResp");
-
+  const overlay = document.getElementById("contactOverlay"); // your overlay div
+  const closeBtn = document.getElementById("closeOverlay");   // the × div
 
   // Form submission
   form.addEventListener("submit", async (e) => {
@@ -39,7 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.textContent = "Submit";
   });
 
-
-
-
-
+  // Close overlay on × click
+  if (closeBtn && overlay) {
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.remove("show");   // hide overlay
+      document.body.style.overflow = ""; // restore scroll if it was disabled
+    });
+  }
+});
