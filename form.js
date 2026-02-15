@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const scriptURL = "https://script.google.com/macros/s/AKfycbwOBmOP10BrcDTooXzHQO9jgAdWYBXquocmfjh6O6NHW1SBWd-fiwNP4UMIUJtCXj4rRg/exec";
   const form = document.getElementById("contactForm");
   const formResp = document.getElementById("formResp");
-  const overlay = document.getElementById("contactOverlay"); // your overlay div
-  const closeBtn = document.getElementById("closeOverlay");   // your close button
+
 
   // Form submission
   form.addEventListener("submit", async (e) => {
@@ -40,10 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.textContent = "Submit";
   });
 
-const closeOverlay = () => {
-  const overlay = document.getElementById("contactOverlay");
-  if (overlay) {
-    overlay.classList.remove("show");
-    overlay.classList.add("hide");
-  }
-};
+const contactOverlay = document.getElementById("contactOverlay");
+const closeOverlayBtn = document.getElementById("closeOverlay");
+
+if (closeOverlayBtn && contactOverlay) {
+  closeOverlayBtn.addEventListener("click", () => {
+    contactOverlay.classList.remove("show");
+    document.body.style.overflow = "";
+  });
+}
+
