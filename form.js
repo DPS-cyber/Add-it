@@ -39,13 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.textContent = "Submit";
   });
 
-const contactOverlay = document.getElementById("contactOverlay");
-const closeOverlayBtn = document.getElementById("closeOverlay");
+const closeOverlay = () => {
+  const overlay = document.getElementById("contactOverlay");
+  if (overlay) {
+    overlay.classList.remove("show");
+    overlay.classList.add("hide");
+  }
+};
 
-if (closeOverlayBtn && contactOverlay) {
-  closeOverlayBtn.addEventListener("click", () => {
-    contactOverlay.classList.remove("show");
-    document.body.style.overflow = "";
-  });
-}
 
