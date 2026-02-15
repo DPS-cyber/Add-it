@@ -1,13 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzKWDmuNvxtkx9IsMMRzkIIUZ3QcnnA6cSlpT2H0QhMvdxOT2-8oqFF1Ey9qREo-eoVJA/exec"; 
-  
+  // 1. CONFIGURATION
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzKWDmuNvxtkx9IsMMRzkIIUZ3QcnnA6cSlpT2H0QhMvdxOT2-8oqFF1Ey9qREo-eoVJA/exec"; // Replace with your Google /exec URL
   const _k = atob("QWRkaXRCcmFuZF9TZWN1cmVfMjAyNA=="); 
 
   const form = document.getElementById("contactForm");
   const formResp = document.getElementById("formResp");
   const overlay = document.getElementById("contactOverlay");
   const closeBtn = document.getElementById("closeOverlay");
-const dropdownContainer = document.querySelector(".custom-dropdown");
+
+  // 2. DROPDOWN ELEMENTS
+  const dropdownContainer = document.querySelector(".custom-dropdown");
   const dropTrig = document.getElementById("dropTrig");
   const dropMenu = document.getElementById("dropMenu");
   const serviceInput = document.getElementById("serviceInputVal");
@@ -45,48 +47,62 @@ const dropdownContainer = document.querySelector(".custom-dropdown");
       dropdownContainer.classList.remove("active");
     });
   }
-  
-  // Form Submission
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
 
-    const btn = form.querySelector("button");
-    btn.disabled = true;
-    btn.textContent = "Processing...";
+  // --- FORM SUBMISSION ---
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    const formData = new FormData(form);
-    
-    // Attach the hidden security key
-    formData.append("access_key", _k);
+      // UI Feedback: Loading state
+      const btn = form.querySelector("button");
+      const originalBtnText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Processing...";
 
-    try {
-      await fetch(scriptURL, {
-        method: "POST",
-        mode: "no-cors", 
-        body: formData
-      });
-
-      // Show Success
-      formResp.textContent = "Success! We'll be in touch.";
-      formResp.style.color = "#28a745";
-      form.reset();
-      if (triggerText) triggerText.textContent = "Select Service";
+      const formData = new FormData(form);
       
-      setTimeout(() => {
-        if(overlay) overlay.classList.remove("show");
-        document.body.style.overflow = "";
-      }, 2500);
+      // Attach the Security Key
+      formData.append("access_key", _k);
 
-    } catch (error) {
-      formResp.textContent = "Network error. Please try again.";
-      formResp.style.color = "#ff4d4d";
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Submit";
-    }
-  });
+      try {
+        // mode: 'no-cors' is required for Google Apps Script
+        await fetch(scriptURL, {
+          method: "POST",
+          mode: "no-cors", 
+          body: formData
+        });
 
-  // Close Overlay logic
+        // SUCCESS UI
+        formResp.textContent = "Success! We'll be in touch.";
+        formResp.style.color = "#28a745";
+        form.reset();
+        
+        // Reset Dropdown UI
+        if (triggerText) {
+          triggerText.textContent = "Select Service";
+          triggerText.style.color = "#757575";
+        }
+
+        // Close overlay if applicable
+        setTimeout(() => {
+          if (overlay) {
+            overlay.classList.remove("show");
+            document.body.style.overflow = "";
+          }
+        }, 2500);
+
+      } catch (error) {
+        console.error("Submission Error:", error);
+        formResp.textContent = "Network error. Please try again.";
+        formResp.style.color = "#ff4d4d";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalBtnText;
+      }
+    });
+  }
+
+  // --- OVERLAY CLOSE ---
   if (closeBtn && overlay) {
     closeBtn.addEventListener("click", () => {
       overlay.classList.remove("show");
@@ -94,5 +110,3 @@ const dropdownContainer = document.querySelector(".custom-dropdown");
     });
   }
 });
-
-
