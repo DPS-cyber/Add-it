@@ -9,25 +9,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("closeOverlay");
 
   // Dropdown Handling
+  // 1. SELECT ELEMENTS BY YOUR IDS
   const dropTrig = document.getElementById("dropTrig");
   const dropMenu = document.getElementById("dropMenu");
   const serviceInput = document.getElementById("serviceInputVal");
   const triggerText = dropTrig?.querySelector("span");
 
-  if (dropTrig) {
-    dropTrig.addEventListener("click", () => dropMenu.classList.toggle("active"));
+  // 2. TOGGLE MENU
+  if (dropTrig && dropMenu) {
+    dropTrig.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevents immediate closing from the window listener
+      
+      // Check current state
+      const isHidden = dropMenu.style.display === "none" || dropMenu.style.display === "";
+      
+      // Toggle
+      dropMenu.style.display = isHidden ? "block" : "none";
+    });
   }
 
+  // 3. HANDLE OPTION SELECTION
+  // We use querySelectorAll on the class 'option' since you have multiple
   document.querySelectorAll(".option").forEach(option => {
-    option.addEventListener("click", () => {
-      serviceInput.value = option.getAttribute("data-value");
+    option.addEventListener("click", function(e) {
+      e.stopPropagation();
+      
+      const value = this.getAttribute("data-value");
+      const label = this.textContent;
+
+      // Update the hidden input value (this goes to Google Sheets)
+      if (serviceInput) serviceInput.value = value;
+
+      // Update the UI text so the user sees what they picked
       if (triggerText) {
-        triggerText.textContent = option.textContent;
-        triggerText.style.color = "#000";
+        triggerText.textContent = label;
+        triggerText.style.color = "#000"; // Change color from grey to black
       }
-      dropMenu.classList.remove("active");
+
+      // Hide the menu after selection
+      dropMenu.style.display = "none";
     });
   });
+
+  // 4. CLOSE IF CLICKED OUTSIDE
+  window.addEventListener("click", () => {
+    if (dropMenu) dropMenu.style.display = "none";
+  });
+});
 
   // Form Submission
   form.addEventListener("submit", async (e) => {
@@ -77,3 +105,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
