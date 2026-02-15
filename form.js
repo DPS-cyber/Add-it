@@ -2,44 +2,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const scriptURL = "https://script.google.com/macros/s/AKfycbwOBmOP10BrcDTooXzHQO9jgAdWYBXquocmfjh6O6NHW1SBWd-fiwNP4UMIUJtCXj4rRg/exec";
   const form = document.getElementById("contactForm");
   const formResp = document.getElementById("formResp");
+  const overlay = document.getElementById("contactOverlay"); // your overlay div
+  const closeBtn = document.getElementById("closeOverlay");   // the × div
 
-  if (form) {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  // Form submission
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const btn = form.querySelector("button");
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "Processing...";
-      }
+    const btn = form.querySelector("button");
+    btn.disabled = true;
+    btn.textContent = "Processing...";
 
-      try {
-        const formData = new FormData(form);
+    try {
+      const formData = new FormData(form);
 
-        // Use no-cors mode to ensure the request is sent even if CORS fails
-        // Note: Response is opaque, so we can't check status or text
-        const response = await fetch(scriptURL, {
-          method: "POST",
-          body: formData,
-          mode: "no-cors"
-        });
+      const response = await fetch(scriptURL, {
+        method: "POST",
+        body: formData
+      });
 
-        console.log("Request presumably sent (no-cors mode)");
+      const text = await response.text();
+      console.log("Server response:", text);
 
-        // Optimistic success
-        if (formResp) formResp.textContent = "Message sent!";
+      if (text.includes("success")) {
+        formResp.textContent = "Success.";
         form.reset();
-
-      } catch (error) {
-        console.error("REAL ERROR:", error);
-        if (formResp) formResp.textContent = "Error sending message.";
+      } else {
+        formResp.textContent = "Server responded but not success.";
       }
 
-      if (btn) {
-        btn.disabled = false;
-        btn.textContent = "Submit";
-      }
+    } catch (error) {
+      console.error("REAL ERROR:", error);
+      formResp.textContent = "Network failure.";
+    }
+
+    btn.disabled = false;
+    btn.textContent = "Submit";
+  });
+
+  // Close overlay on × click
+  if (closeBtn && overlay) {
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.remove("show");   // hide overlay
+      document.body.style.overflow = ""; // restore scroll if it was disabled
     });
   }
 });
-
