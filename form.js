@@ -39,12 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.textContent = "Submit";
   });
 
-const closeOverlay = () => {
-  const overlay = document.getElementById("contactOverlay");
-  if (overlay) {
-    overlay.classList.remove("show");
-    overlay.classList.add("hide");
-  }
-};
+
+
 
 
