@@ -7,56 +7,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const formResp = document.getElementById("formResp");
   const overlay = document.getElementById("contactOverlay");
   const closeBtn = document.getElementById("closeOverlay");
-
-  // Dropdown Handling
-  // 1. SELECT ELEMENTS BY YOUR IDS
+const dropdownContainer = document.querySelector(".custom-dropdown");
   const dropTrig = document.getElementById("dropTrig");
   const dropMenu = document.getElementById("dropMenu");
   const serviceInput = document.getElementById("serviceInputVal");
   const triggerText = dropTrig?.querySelector("span");
 
-  // 2. TOGGLE MENU
-  if (dropTrig && dropMenu) {
+  // --- DROPDOWN LOGIC ---
+  if (dropTrig && dropdownContainer) {
     dropTrig.addEventListener("click", (e) => {
-      e.stopPropagation(); // Prevents immediate closing from the window listener
-      
-      // Check current state
-      const isHidden = dropMenu.style.display === "none" || dropMenu.style.display === "";
-      
-      // Toggle
-      dropMenu.style.display = isHidden ? "block" : "none";
+      e.stopPropagation();
+      // Toggle the 'active' class used in your CSS
+      dropdownContainer.classList.toggle("active");
+    });
+
+    // Handle Option Selection
+    document.querySelectorAll(".option").forEach(option => {
+      option.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const val = this.getAttribute("data-value");
+        const text = this.textContent;
+
+        // Update hidden input and UI text
+        if (serviceInput) serviceInput.value = val;
+        if (triggerText) {
+          triggerText.textContent = text;
+          triggerText.style.color = "#000"; // Visual feedback
+        }
+        
+        // Close menu
+        dropdownContainer.classList.remove("active");
+      });
+    });
+
+    // Close dropdown if user clicks anywhere else
+    window.addEventListener("click", () => {
+      dropdownContainer.classList.remove("active");
     });
   }
-
-  // 3. HANDLE OPTION SELECTION
-  // We use querySelectorAll on the class 'option' since you have multiple
-  document.querySelectorAll(".option").forEach(option => {
-    option.addEventListener("click", function(e) {
-      e.stopPropagation();
-      
-      const value = this.getAttribute("data-value");
-      const label = this.textContent;
-
-      // Update the hidden input value (this goes to Google Sheets)
-      if (serviceInput) serviceInput.value = value;
-
-      // Update the UI text so the user sees what they picked
-      if (triggerText) {
-        triggerText.textContent = label;
-        triggerText.style.color = "#000"; // Change color from grey to black
-      }
-
-      // Hide the menu after selection
-      dropMenu.style.display = "none";
-    });
-  });
-
-  // 4. CLOSE IF CLICKED OUTSIDE
-  window.addEventListener("click", () => {
-    if (dropMenu) dropMenu.style.display = "none";
-  });
-});
-
+  
   // Form Submission
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -105,4 +94,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
