@@ -2,7 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const scriptURL = "https://script.google.com/macros/s/AKfycbwOBmOP10BrcDTooXzHQO9jgAdWYBXquocmfjh6O6NHW1SBWd-fiwNP4UMIUJtCXj4rRg/exec";
   const form = document.getElementById("contactForm");
   const formResp = document.getElementById("formResp");
+  const overlay = document.getElementById("contactOverlay"); // your overlay div
+  const closeBtn = document.getElementById("closeOverlay");   // your close button
 
+  // Form submission
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -36,4 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.disabled = false;
     btn.textContent = "Submit";
   });
+
+  // Close overlay
+  if (closeBtn && overlay) {
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.remove("show"); // hide overlay
+      document.body.style.overflow = ""; // restore scrolling
+    });
+  }
 });
