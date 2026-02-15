@@ -40,11 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.textContent = "Submit";
   });
 
-  // Close overlay
-  if (closeBtn && overlay) {
-    closeBtn.addEventListener("click", () => {
-      overlay.classList.remove("show"); // hide overlay
-      document.body.style.overflow = ""; // restore scrolling
-    });
+const closeOverlay = () => {
+  const overlay = document.getElementById("contactOverlay");
+  if (overlay) {
+    overlay.classList.remove("show");
+    overlay.classList.add("hide");
   }
-});
+};
