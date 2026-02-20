@@ -102,17 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "System buffering... 🧠 Try asking about **Pricing**, **Work**, or say **'Hire'**!"
   ];
 
-  const PROMO_MESSAGE = `🔥 **Valentine's Creative Acceleration Event — 30% OFF All Services**
-
-From February 14th to February 16th, enjoy **30% off** all Add-it services — including Lead Generation systems, high-performance Ad Creation, and full Creative Acceleration packages.
-
-Built the way designers think. Optimized the way businesses grow.
-
-✨ Scale faster. Convert better. Accelerate smarter.
-
-⏰ This is a **limited-time offer** and expires **February 16th at 11:59 PM**.
-
-Would you like help getting started?`;
 
   /* ================= 7. BOT BRAIN (Zero-G Core) ================= */
   cBub?.addEventListener("click", () => cWin.classList.toggle("active"));
@@ -178,13 +167,11 @@ Would you like help getting started?`;
   const processBotLogic = (t, isInitial) => {
     let followUp = "";
 
-    if (smartMatch(t, "promo") || smartMatch(t, "promotion") || smartMatch(t, "discount") || smartMatch(t, "offer") || smartMatch(t, "deal") || smartMatch(t, "valentine")) {
-      followUp = PROMO_MESSAGE;
-    } else if (smartMatch(t, "work") || smartMatch(t, "projects") || smartMatch(t, "portfolio")) {
+    if (smartMatch(t, "work") || smartMatch(t, "projects") || smartMatch(t, "portfolio")) {
       followUp = "📁 100+ projects delivered. Scroll to **'Market Dominance'** for the visual catalog.";
     } else if (smartMatch(t, "pricing") || smartMatch(t, "cost") || smartMatch(t, "how much")) {
       const p = userCountry === "IN" ? "₹15,000" : "$500";
-      followUp = `💰 Our custom architecture typically starts at **${p}** for companies but you cant adjust according to your requirement.\n\n🔥 **SPECIAL OFFER**: Get **30% OFF** all services until Feb 16th! Ask about our **'promo'** for details.`;
+      followUp = `💰 Our custom architecture typically starts at **${p}** for companies but you cant adjust according to your requirement.`;
     } else if (smartMatch(t, "hire") || smartMatch(t, "start") || smartMatch(t, "contact") || smartMatch(t, "make me an ad") || smartMatch(t, "create ad") || smartMatch(t, "need ad") || smartMatch(t, "make it")) {
       setTimeout(() => startContact(), 600);
       return;
