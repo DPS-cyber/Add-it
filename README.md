@@ -1,6 +1,6 @@
 
 # 🌟 Add-it.ltd
-![Business Logo](https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/logo.png)  
+![Business Logo]<img src="https://raw.githubusercontent.com/DPS-cyber/Add-it/refs/heads/main/logo.png" width="90px">
 
 Welcome to **Add-it.ltd** – your destination for finding impactful ads.
 A professional website of a small scale bussiness.
