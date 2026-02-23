@@ -5,8 +5,8 @@ description: >-
 email: addit.brand@gmail.com
 instagram_username: addit.ltd
 author: Add-It
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/Add-it" # the subpath of your site, e.g. /blog
+url: "https://dps-cyber.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
 markdown: kramdown
