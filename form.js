@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzKWDmuNvxtkx9IsMMRzkIIUZ3QcnnA6cSlpT2H0QhMvdxOT2-8oqFF1Ey9qREo-eoVJA/exec"; 
-  
-  const _k = atob("QWRkaXRCcmFuZF9TZWN1cmVfMjAyNA=="); 
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzKWDmuNvxtkx9IsMMRzkIIUZ3QcnnA6cSlpT2H0QhMvdxOT2-8oqFF1Ey9qREo-eoVJA/exec";
+
+  // This is "AdditBrand_Secure_2024" encoded to Base64 to hide it from plain text search
+  const _k = atob("QWRkaXRCcmFuZF9TZWN1cmVfMjAyNA==");
 
   const form = document.getElementById("contactForm");
   const formResp = document.getElementById("formResp");
@@ -15,7 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const triggerText = dropTrig?.querySelector("span");
 
   if (dropTrig) {
-    dropTrig.addEventListener("click", () => dropMenu.classList.toggle("active"));
+    dropTrig.addEventListener("click", () => {
+      const dropdown = dropTrig.closest(".custom-dropdown");
+      if (dropdown) dropdown.classList.toggle("active");
+    });
   }
 
   document.querySelectorAll(".option").forEach(option => {
@@ -25,8 +29,17 @@ document.addEventListener("DOMContentLoaded", () => {
         triggerText.textContent = option.textContent;
         triggerText.style.color = "#000";
       }
-      dropMenu.classList.remove("active");
+      const dropdown = option.closest(".custom-dropdown");
+      if (dropdown) dropdown.classList.remove("active");
     });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    const dropdown = document.querySelector(".custom-dropdown");
+    if (dropdown && !dropdown.contains(e.target)) {
+      dropdown.classList.remove("active");
+    }
   });
 
   // Form Submission
@@ -38,14 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.textContent = "Processing...";
 
     const formData = new FormData(form);
-    
+
     // Attach the hidden security key
     formData.append("access_key", _k);
 
     try {
       await fetch(scriptURL, {
         method: "POST",
-        mode: "no-cors", 
+        mode: "no-cors",
         body: formData
       });
 
@@ -54,9 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
       formResp.style.color = "#28a745";
       form.reset();
       if (triggerText) triggerText.textContent = "Select Service";
-      
+
       setTimeout(() => {
-        if(overlay) overlay.classList.remove("show");
+        if (overlay) overlay.classList.remove("show");
         document.body.style.overflow = "";
       }, 2500);
 
