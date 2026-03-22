@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   openBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
       const href = btn.getAttribute("href");
-      if (href === "#contact" || btn.classList.contains("btn-contact")) {
+      if (href === "#contact") {
         // Only prevent default if we're handling it as an overlay
         // main.js also handles this, but this is a backup/direct handler
         if (overlay) {
