@@ -242,6 +242,13 @@ document.addEventListener("DOMContentLoaded", () => {
         switchPage("work");
       } else if (sectionId === "home") {
         switchPage("home");
+      } else if (sectionId === "contact") {
+        // Handle contact overlay directly
+        const overlay = document.getElementById("contactOverlay");
+        if (overlay) {
+            overlay.classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
       } else {
         // Internal section (services, about, etc.)
         switchPage("home", true, sectionId);
@@ -454,6 +461,14 @@ function initMagneticButtons() {
   });
 }
 
+// ===== VALENTINE PROMO LOGIC (TEST MODE) =====
+
+(function () {
+  const banner = document.getElementById("promoBanner");
+  if (!banner) return;
+
+  document.body.classList.add("promo-active");
+})();
 
 // 10. Custom Cursor Logic
 function initCursor() {
