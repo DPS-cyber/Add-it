@@ -7,44 +7,74 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Webflow-Style Progressive Preloader
+  // 1. PreloadJS & One-Time Load Optimization
   const startPreloader = () => {
     const percentEl = document.getElementById("loaderPercent");
     const barEl = document.getElementById("loaderBar");
-    let progress = 0;
 
-    const interval = setInterval(() => {
-      // Fast progress feel
-      const increment = Math.random() * (progress > 85 ? 1 : 15);
-      progress = Math.min(100, progress + increment);
+    const finishLoading = () => {
+      setTimeout(() => {
+        document.body.classList.add("loaded");
+        initAll();
+      }, 50);
+    };
 
-      if (percentEl) percentEl.textContent = Math.floor(progress);
+    // Optimization: Check for returning user
+    const hasLoadedBefore = localStorage.getItem("siteLoaded");
+
+    if (hasLoadedBefore) {
+      // Returning user: Ultra-fast feel (0.3s)
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 50;
+        if (percentEl) percentEl.textContent = progress;
+        if (barEl) barEl.style.width = progress + "%";
+        if (progress >= 100) {
+          clearInterval(interval);
+          finishLoading();
+        }
+      }, 10);
+      return;
+    }
+
+    // First time user: Real preloading with PreloadJS
+    const queue = new createjs.LoadQueue(false);
+
+    queue.on("progress", (event) => {
+      const progress = Math.floor(event.progress * 100);
+      if (percentEl) percentEl.textContent = progress;
       if (barEl) barEl.style.width = progress + "%";
+    });
 
-      if (progress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          document.body.classList.add("loaded");
-          initAll();
-        }, 600);
-      }
-    }, 40);
+    queue.on("complete", () => {
+      localStorage.setItem("siteLoaded", "true");
+      finishLoading();
+    });
+
+    queue.loadManifest([
+      { id: "logo", src: "https://github.com/DPS-cyber/Add-it/blob/main/logo.png?raw=true" },
+      { id: "ad1", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad1.jpg?raw=true" },
+      { id: "ad2", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad2.jpg?raw=true" },
+      { id: "ad3", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad3.jpg?raw=true" },
+      { id: "ad4", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad4.JPG?raw=true" },
+      { id: "ad5", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad5.jpg?raw=true" },
+      { id: "ad6", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad6.jpg?raw=true" }
+    ]);
   };
   startPreloader();
 
+  // Hoist nav references so all code can access them
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('navMenu');
+
   // Hamburger Menu Toggle Function
   const initHamburgerMenu = () => {
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('navMenu');
-
     if (!hamburger || !navMenu) {
       console.log('Hamburger or navMenu not found');
       return;
     }
 
-    console.log('Hamburger menu initialized');
-
     hamburger.addEventListener('click', () => {
-      console.log('Hamburger clicked');
       hamburger.classList.toggle('active');
       navMenu.classList.toggle('show');
     });
@@ -66,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initMagneticButtons();
     initHamburgerMenu();
     initCursor();
+    initWorkSearch();
 
     // Only init tilt on desktop
     if (!isMobile) {
@@ -95,35 +126,125 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  // 3. Unified Precision Scroll
-  document.querySelectorAll('a[href^="#"], .nav-cta, .btn-contact').forEach(link => {
-    link.addEventListener("click", (e) => {
-      const href = link.getAttribute("href") || "#contact";
-      const targetEl = document.querySelector(href);
+  // 3. SPA ROUTER & History API
+  const wipe = document.getElementById("page-wipe");
+  const views = document.querySelectorAll(".page-view");
+  const homeView = document.getElementById("home-view");
+  const workView = document.getElementById("work-view");
 
-      if (href === "#contact") {
-        e.preventDefault();
-        const contactOverlay = document.getElementById("contactOverlay");
-        if (contactOverlay) {
-          contactOverlay.classList.add("show");
-          document.body.style.overflow = "hidden";
-          if (hamburger) hamburger.classList.remove("active");
-          if (navMenu) navMenu.classList.remove("show");
+  const switchPage = (viewId, push = true, sectionId = "") => {
+    if (!wipe) return;
+    
+    // If we're already on the correct view, just scroll to section
+    const currentView = Array.from(views).find(v => v.classList.contains("active"));
+    const targetView = document.getElementById(viewId + "-view");
+    
+    if (currentView === targetView && sectionId) {
+      scrollToSection(sectionId);
+      if (push) updateHistory(viewId, sectionId);
+      return;
+    }
+
+    // Otherwise, do the wipe
+    wipe.classList.remove("exit");
+    wipe.classList.add("active");
+
+    setTimeout(() => {
+      // Swapping Views
+      views.forEach(v => v.classList.remove("active"));
+      if (targetView) {
+        targetView.classList.add("active");
+        
+        if (sectionId) {
+          scrollToSection(sectionId);
+        } else {
+          window.scrollTo(0, 0);
         }
-        return;
       }
 
-      if (targetEl) {
-        e.preventDefault();
-        if (hamburger) hamburger.classList.remove("active");
-        if (navMenu) navMenu.classList.remove("show");
+      // Exit Wipe
+      wipe.classList.remove("active");
+      wipe.classList.add("exit");
+      
+      // Update History
+      if (push) {
+        updateHistory(viewId, sectionId);
+      }
 
-        const headerH = window.innerWidth <= 768 ? 80 : 100;
-        const targetPos = targetEl.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({
-          top: targetPos - headerH - 40,
-          behavior: "smooth"
-        });
+      // Re-trigger reveal animations for the new view
+      initObservers();
+
+      setTimeout(() => wipe.classList.remove("exit"), 600);
+    }, 600);
+  };
+
+  const scrollToSection = (id) => {
+    const target = document.getElementById(id.replace("#", ""));
+    if (target) {
+      const headerH = window.innerWidth <= 768 ? 80 : 100;
+      const targetPos = target.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: targetPos - headerH - 40,
+        behavior: "smooth"
+      });
+    }
+  };
+
+  const updateHistory = (view, section = "") => {
+    let path = view === "home" ? "/" : "/" + view;
+    if (section && section !== "home") {
+        // We use the section id as the path for sections on home
+        path = "/" + section.replace("#", "");
+    }
+    history.pushState({ view: view, section: section }, "", path);
+  };
+
+  // Listen for Browser Back/Forward
+  window.addEventListener("popstate", (e) => {
+    if (e.state) {
+        switchPage(e.state.view, false, e.state.section);
+    } else {
+        // Fallback to URL parsing
+        const path = window.location.pathname.replace("/", "") || "home";
+        // Simple logic for known sections
+        if (["services", "about", "contact"].includes(path)) {
+            switchPage("home", false, path);
+        } else {
+            switchPage(path, false);
+        }
+    }
+  });
+
+  // Handle Initial Load
+  const initialPath = window.location.pathname.replace("/", "") || "home";
+  if (initialPath === "work") {
+    views.forEach(v => v.classList.remove("active"));
+    workView.classList.add("active");
+  } else if (["services", "about", "contact"].includes(initialPath)) {
+    // Start on home but scroll to section
+    setTimeout(() => switchPage("home", false, initialPath), 500);
+  }
+
+  // Intercept Navigation
+  document.querySelectorAll('a[href^="#"], .nav-cta, .btn-contact, #work-teaser a[href="#work"]').forEach(link => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (!href || href === "#") return;
+
+      e.preventDefault();
+      if (hamburger) hamburger.classList.remove("active");
+      if (navMenu) navMenu.classList.remove("show");
+
+      const sectionId = href.replace("#", "");
+      
+      // Determine if it's a view switch or a section switch
+      if (sectionId === "work") {
+        switchPage("work");
+      } else if (sectionId === "home") {
+        switchPage("home");
+      } else {
+        // Internal section (services, about, etc.)
+        switchPage("home", true, sectionId);
       }
     });
   });
@@ -169,6 +290,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll('.reveal, .ig-stage, .work-card, .title-clamp, .speedo-container').forEach(el => {
       masterObserver.observe(el);
+    });
+  }
+
+  // 6. Portfolio Search & Tag Engine
+  function initWorkSearch() {
+    const searchInput = document.getElementById("workSearch");
+    const grid = document.getElementById("fullWorkGrid");
+    const keys = document.querySelectorAll(".filter-key");
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll(".work-card");
+    let activeFilter = "all";
+
+    const performFilter = () => {
+      const term = searchInput ? searchInput.value.toLowerCase().trim() : "";
+      
+      cards.forEach(card => {
+        const tags = card.getAttribute("data-tags") ? card.getAttribute("data-tags").toLowerCase() : "";
+        const matchesSearch = tags.includes(term) || term === "";
+        const matchesKey = activeFilter === "all" || tags.includes(activeFilter);
+
+        if (matchesSearch && matchesKey) {
+          card.classList.remove("hidden");
+        } else {
+          card.classList.add("hidden");
+        }
+      });
+    };
+
+    if (searchInput) {
+      searchInput.addEventListener("input", performFilter);
+    }
+
+    keys.forEach(key => {
+      key.addEventListener("click", () => {
+        keys.forEach(k => k.classList.remove("active"));
+        key.classList.add("active");
+        activeFilter = key.getAttribute("data-filter");
+        performFilter();
+      });
     });
   }
 
@@ -293,14 +454,6 @@ function initMagneticButtons() {
   });
 }
 
-// ===== VALENTINE PROMO LOGIC (TEST MODE) =====
-
-(function () {
-  const banner = document.getElementById("promoBanner");
-  if (!banner) return;
-
-  document.body.classList.add("promo-active");
-})();
 
 // 10. Custom Cursor Logic
 function initCursor() {
