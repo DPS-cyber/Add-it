@@ -7,10 +7,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preloader-js@1.0.1/assets/css/preloader.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/1.0.1/preloadjs.min.js"
+    integrity="sha512-fEAYokehnF/e5P+Whrp7YAWBQGqQtimX1DrFBu21J+4WI2wCM/z+kTHiRMCcfYUqHbCcCADC9QivGn7Q75IQig=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="main.js" defer fetchpriority="high"></script>
   <meta name="description"
     content="Add It is a digital marketing and creative design agency helping brands grow through content creation, branding, social media marketing, video production, and website design.">
@@ -54,41 +59,7 @@
   <title>Add It | Digital Marketing & Creative Design Agency</title>
   <link rel="icon" href="https://github.com/DPS-cyber/Add-it/blob/main/favicon.ico?raw=true" type="image/x-icon">
   <style>
-    /* Preloader */
-    #preloader {
-      position: fixed;
-      inset: 0;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-      transition: opacity 0.4s ease, visibility 0.4s;
-    }
-
-    .loaded #preloader {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .loader-line {
-      width: 120px;
-      height: 3px;
-      background: linear-gradient(90deg, #6B8F71 0%, #6B8F71 40%, #ddd 40%);
-      background-size: 200% 100%;
-      animation: loading 1s linear infinite;
-    }
-
-    @keyframes loading {
-      from {
-        background-position: 0%
-      }
-
-      to {
-        background-position: -200%
-      }
-    }
+    /* Old Preloader removed */
 
     /* Cursor for Desktop */
     @media(min-width:769px) {
@@ -170,7 +141,7 @@
     }
 
     html {
-      scroll-behavior: auto;
+      scroll-behavior: smooth;
       scroll-padding-top: 100px;
     }
 
@@ -206,7 +177,6 @@
       max-width: 1400px;
       margin: 0 auto;
       width: 100%;
-      overflow-x: hidden;
     }
 
     @media (max-width: 768px) {
@@ -293,16 +263,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: var(--scroll-progress, 0%);
-      height: 2px;
-      background: var(--brand);
-      transition: width 0.1s linear;
-    }
+
 
     .shimmer {
       position: absolute;
@@ -335,16 +296,35 @@
     }
 
     nav a {
+      font-family: 'General Sans', sans-serif;
       text-decoration: none;
       color: var(--text);
-      font-weight: 500;
-      font-size: 0.95rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
       opacity: 0.6;
-      transition: opacity 0.3s;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--text);
+      transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    nav a:hover::before {
+      width: 100%;
     }
 
     nav a:hover {
       opacity: 1;
+      transform: translateX(10px);
     }
 
     @media (max-width: 768px) {
@@ -375,28 +355,45 @@
         visibility: visible;
       }
 
-      nav a {
+      nav a:not(.mobile-cta) {
         font-family: 'General Sans', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 800;
-        letter-spacing: -0.04em;
-        text-transform: uppercase;
+        font-size: 1.3rem;
+        /* Optimal balance size */
+        font-weight: 600;
+        letter-spacing: -0.02em;
         color: #000;
         opacity: 0.6;
         width: 100%;
-        padding: 14px 0;
+        padding: 18px 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.03);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        transition: opacity 0.3s;
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
       }
 
-      nav a:hover {
+      nav a:not(.mobile-cta)::before {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background: #000;
+        transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      nav a:not(.mobile-cta):hover::before {
+        width: 100%;
+      }
+
+      nav a:not(.mobile-cta):hover {
         opacity: 1;
+        padding-left: 20px;
       }
 
-      nav a::after {
+      nav a:not(.mobile-cta)::after {
         content: '\f178';
         /* Long arrow */
         font-family: 'Font Awesome 6 Free';
@@ -407,26 +404,27 @@
         transition: transform 0.3s, opacity 0.3s;
       }
 
-      nav a:hover::after {
+      nav a:not(.mobile-cta):hover::after {
         transform: translateX(0);
         opacity: 0.5;
       }
 
-      nav a:last-child {
-        border-bottom: none;
-      }
-
       .mobile-cta {
         display: block !important;
-        background: var(--brand);
-        color: #fff;
+        background: var(--text);
+        color: #fff !important;
         padding: 16px 32px;
-        border-radius: 40px;
+        border-radius: 50px;
         text-decoration: none;
-        margin-top: 20px;
-        font-size: 1.2rem !important;
+        margin-top: 15px;
+        font-size: 1.1rem !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
         text-align: center;
         transition: all 0.3s var(--transit);
+        opacity: 1 !important;
+        border: none !important;
       }
 
       .mobile-cta:hover {
@@ -475,18 +473,23 @@
     }
 
     .nav-cta {
+      font-family: 'General Sans', sans-serif;
       background: var(--text);
       color: #fff;
-      padding: 12px 28px;
-      border-radius: 40px;
+      padding: 14px 32px;
+      border-radius: 50px;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: transform 0.3s var(--transit);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.3s var(--transit);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
     .nav-cta:hover {
-      transform: scale(1.05);
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     /* Mobile Optimizations */
@@ -505,20 +508,7 @@
         height: 80px;
       }
 
-      nav {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(40px);
-        -webkit-backdrop-filter: blur(40px);
-        padding: 55px 30px;
-        gap: 32px;
-        justify-content: flex-start;
-      }
 
-      nav a {
-        font-size: 0.8rem;
-        font-weight: 700;
-        opacity: 0.8;
-      }
 
       /* Hero & Section Spacing */
       .section-container {
@@ -532,10 +522,14 @@
       }
 
       .title-clamp {
-        font-size: clamp(34px, 12vw, 56px) !important;
-        line-height: 1.05;
+        font-size: clamp(32px, 11vw, 48px) !important;
+        line-height: 1.1;
         margin-bottom: 20px;
         letter-spacing: -0.04em;
+      }
+
+      .kinetic-word {
+        white-space: nowrap;
       }
 
       .sub-clamp {
@@ -658,6 +652,139 @@
       }
     }
 
+    /* ===== SPA VIEW SYSTEM ===== */
+    .page-view {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s var(--transit), transform 0.6s var(--transit);
+    }
+
+    .page-view.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #page-wipe {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 999999;
+      transform: translateY(100%);
+      transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+      pointer-events: none;
+    }
+
+    #page-wipe.active {
+      transform: translateY(0);
+    }
+
+    #page-wipe.exit {
+      transform: translateY(-100%);
+    }
+
+    /* ===== Portfolio Glass UI (Refined v7.3) ===== */
+    .work-search-wrap {
+      margin: 40px 0 20px;
+      max-width: 320px;
+      position: relative;
+    }
+
+    .work-search-input {
+      width: 100%;
+      padding: 18px 28px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: all 0.4s var(--transit);
+      color: #000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+    }
+
+    .work-search-input::placeholder {
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    .work-search-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      border-color: var(--brand);
+      box-shadow: 0 10px 40px rgba(234, 92, 31, 0.15);
+    }
+
+    .filter-keys {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 50px;
+      justify-content: flex-start;
+    }
+
+    .filter-key {
+      padding: 10px 24px;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s var(--transit);
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .filter-key:hover {
+      background: rgba(234, 92, 31, 0.1);
+      border-color: rgba(234, 92, 31, 0.2);
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    .filter-key.active {
+      background: rgba(234, 92, 31, 0.08);
+      color: var(--brand);
+      opacity: 1;
+      border: 1px solid var(--brand);
+      box-shadow: none;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .work-search-wrap {
+        margin: 40px auto 20px;
+        max-width: 100%;
+      }
+
+      .filter-keys {
+        justify-content: center;
+      }
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .work-grid .work-card {
+      transition: all 0.6s var(--transit);
+    }
+
+    .work-grid .work-card.hidden {
+      display: none;
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
     /* Marquee / Cinema Grid */
     .marquee-wrap {
       overflow: hidden;
@@ -678,6 +805,7 @@
 
     .marquee-content {
       -webkit-user-select: none;
+      user-select: none;
       display: inline-block;
       font-size: clamp(40px, 5vw, 80px);
       font-weight: 900;
@@ -695,6 +823,7 @@
 
     .work-card {
       -webkit-user-select: none;
+      user-select: none;
       flex: 0 0 450px;
       aspect-ratio: 16/9;
       border-radius: var(--radius);
@@ -749,6 +878,7 @@
 
     .contact-container {
       -webkit-user-select: none;
+      user-select: none;
       width: 100%;
       height: 100%;
       display: flex;
@@ -758,6 +888,7 @@
     @media (max-width: 768px) {
       .contact-container {
         -webkit-user-select: none;
+        user-select: none;
         padding: 40px 20px;
         flex-direction: column;
       }
@@ -917,13 +1048,27 @@
     /* Instagram Magic Restoration */
     .ig-stage {
       -webkit-user-select: none;
+      user-select: none;
       position: relative;
       border-radius: var(--radius);
       overflow: hidden;
       background: #000;
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
-      width: 640px;
+      box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.1),
+        0 60px 120px rgba(0, 0, 0, 0.25);
+      width: 480px;
+      max-width: 100%;
+      height: 480px;
       margin: 40px auto 0;
+      transform: translateY(0);
+      transition: transform 0.6s var(--transit), box-shadow 0.6s var(--transit);
+    }
+
+    .ig-stage:hover {
+      transform: translateY(-8px);
+      box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.15),
+        0 80px 160px rgba(0, 0, 0, 0.35);
     }
 
     .ig-glass {
@@ -980,15 +1125,24 @@
 
     .ig-pill {
       background: rgba(255, 255, 255, 0.1);
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: 100px;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       color: #fff;
       text-transform: uppercase;
       letter-spacing: 0.2em;
       border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      cursor: pointer;
+    }
+
+    .ig-pill:hover {
+      transform: translateX(10px);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
     }
 
     .ig-glass h4 {
@@ -1018,48 +1172,140 @@
       pointer-events: all;
     }
 
-    /* PRELOADER */
+    /* FULL SCREEN COLUMN PRELOADER */
     #preloader {
       position: fixed;
       inset: 0;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       z-index: 100000;
-      transition: opacity 0.5s var(--transit);
+      pointer-events: all;
+      display: block;
+      perspective: 1200px;
+      background: #FFFFFF;
+    }
+
+    .loader-cards-wrap {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      gap: 0;
+      transform-style: preserve-3d;
+    }
+
+    .loader-card-col {
+      flex: 1;
+      height: 100vh;
+      transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+      transform-style: preserve-3d;
+    }
+
+    body.loaded .loader-card-col {
+      transform: translateY(-120vh);
+    }
+
+    body.loaded .loader-card-col:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    body.loaded .loader-card-col:nth-child(2) {
+      transition-delay: 0.04s;
+    }
+
+    body.loaded .loader-card-col:nth-child(3) {
+      transition-delay: 0.08s;
+    }
+
+    body.loaded .loader-card-col:nth-child(4) {
+      transition-delay: 0.12s;
+    }
+
+    body.loaded .loader-card-col:nth-child(5) {
+      transition-delay: 0.16s;
+    }
+
+    .loader-card-inner {
+      width: calc(100% + 2px);
+      margin-left: -1px;
+      height: 130vh;
+      margin-top: -15vh;
+      background: linear-gradient(90deg, #f8f8f8 0%, #ffffff 20%, #ffffff 80%, #ebebeb 100%);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 0 0 32px 32px;
+      box-shadow: inset 10px 0 20px rgba(0, 0, 0, 0.02), inset -10px 0 20px rgba(0, 0, 0, 0.04), 0 20px 50px rgba(0, 0, 0, 0.15);
+      animation: fullScreenWave 1.0s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+      transform-origin: top;
+    }
+
+    .loader-card-col:nth-child(1) .loader-card-inner {
+      animation-delay: 0s;
+    }
+
+    .loader-card-col:nth-child(2) .loader-card-inner {
+      animation-delay: 0.08s;
+    }
+
+    .loader-card-col:nth-child(3) .loader-card-inner {
+      animation-delay: 0.16s;
+    }
+
+    .loader-card-col:nth-child(4) .loader-card-inner {
+      animation-delay: 0.24s;
+    }
+
+    .loader-card-col:nth-child(5) .loader-card-inner {
+      animation-delay: 0.32s;
+    }
+
+    @keyframes fullScreenWave {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(4vh);
+      }
     }
 
     .loader-content {
-      text-align: center;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100001;
+      pointer-events: none;
     }
 
     .loader-percent {
-      font-size: 10vw;
+      display: none;
+      font-size: 15vw;
       font-weight: 800;
       letter-spacing: -0.05em;
       line-height: 1;
+      color: #fff;
+      mix-blend-mode: difference;
+    }
+
+    body.loaded .loader-percent {
+      opacity: 0;
+      transition: opacity 0.5s;
     }
 
     .loader-bar-wrap {
-      width: 200px;
-      height: 2px;
-      background: #eee;
-      margin: 20px auto;
-      overflow: hidden;
-      border-radius: 2px;
+      display: none;
     }
 
     .loader-bar-progress {
       width: 0%;
-      height: 100%;
-      background: rgb(234, 92, 31);
-      transition: width 0.1s linear;
     }
 
     body.loaded #preloader {
-      opacity: 0;
       pointer-events: none;
+      visibility: hidden;
+      background: transparent;
+      transition: background 0.1s, visibility 0s linear 1.5s;
     }
 
 
@@ -1323,6 +1569,23 @@
 <body>
   <div class="cursor"></div>
   <div id="preloader">
+    <div class="loader-cards-wrap">
+      <div class="loader-card-col">
+        <div class="loader-card-inner"></div>
+      </div>
+      <div class="loader-card-col">
+        <div class="loader-card-inner"></div>
+      </div>
+      <div class="loader-card-col">
+        <div class="loader-card-inner"></div>
+      </div>
+      <div class="loader-card-col">
+        <div class="loader-card-inner"></div>
+      </div>
+      <div class="loader-card-col">
+        <div class="loader-card-inner"></div>
+      </div>
+    </div>
     <div class="loader-content">
       <div class="loader-percent" id="loaderPercent">0</div>
       <div class="loader-bar-wrap">
@@ -1334,7 +1597,8 @@
 
   <header>
     <div class="shimmer"></div>
-    <div class="logo"><img src="https://github.com/DPS-cyber/Add-it/blob/main/logo.png?raw=true" alt="Logo"></div>
+    <a href="#home" class="logo"><img src="https://github.com/DPS-cyber/Add-it/blob/main/logo.png?raw=true"
+        alt="Logo"></a>
     <nav id="navMenu">
       <a href="#work">Work</a>
       <a href="#services">Services</a>
@@ -1347,116 +1611,175 @@
     </div>
   </header>
 
-  <main>
-    <!-- HERO SECTION -->
-    <section class="section-container hero-section reveal">
-      <h1 class="title-clamp">
-        <span class="kinetic-word">Don't let old</span><br>
-        <span class="kinetic-word">systems hold you</span><br>
-        <span class="kinetic-word">back. Ready to</span><br>
-        <span class="kinetic-word">scale?</span>
-      </h1>
-      <p class="sub-clamp">The market doesn't wait for your brand to catch up. We build systems for
-        agencies and companies that refuse to be left behind.</p>
+  <div id="page-wipe"></div>
 
-      <div class="speedo-container reveal" id="speedoContainer">
-        <div class="gauge-base">
-          <div class="gauge-segments"></div>
-          <div class="gauge-needle" id="speedoNeedle"></div>
-        </div>
-        <div class="gauge-center">
-          <div class="speed-value" id="speedValue">0</div>
-          <div class="speed-label">Current Creativity</div>
-        </div>
-      </div>
-    </section>
+  <main id="main-content">
+    <!-- HOME VIEW -->
+    <div id="home-view" class="page-view active">
+      <!-- HERO SECTION -->
+      <section class="section-container hero-section reveal">
+        <h1 class="title-clamp">
+          <span class="kinetic-word">Don't let old</span><br>
+          <span class="kinetic-word">systems hold you</span><br>
+          <span class="kinetic-word">back. Ready to</span><br>
+          <span class="kinetic-word">scale?</span>
+        </h1>
+        <p class="sub-clamp">The market doesn't wait for your brand to catch up. We build systems for
+          agencies and companies that refuse to be left behind.</p>
 
-    <div class="marquee-wrap">
-      <div class="marquee-content" id="accContent">CONTENT STRATEGY &bull; CINEMA DESIGN &bull; GROWTH ENGINEERING
-        &bull; BRAND ARCHITECTURE &bull; </div>
-    </div>
-
-    <!-- WORK MARQUEE -->
-    <section class="section-container" id="work">
-      <div class="reveal">
-        <h2 class="sub-clamp">Selected Works</h2>
-      </div>
-      <div class="marquee-wrap" style="margin-top: 40px;">
-        <div class="marquee-row" id="heroRow">
-          <div class="work-card"><img src="ad1.jpg"></div>
-          <div class="work-card"><img src="ad2.jpg"></div>
-          <div class="work-card"><img src="ad3.jpg"></div>
-          <div class="work-card"><img src="ad4.JPG"></div>
-          <div class="work-card"><img src="ad5.jpg"></div>
-          <div class="work-card"><img src="ad6.jpg"></div>
-          <div class="work-card"><img src="ad1.jpg"></div>
-          <div class="work-card"><img src="ad2.jpg"></div>
-          <div class="work-card"><img src="ad3.jpg"></div>
-          <div class="work-card"><img src="ad4.JPG"></div>
-          <div class="work-card"><img src="ad5.jpg"></div>
-          <div class="work-card"><img src="ad6.jpg"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section class="section-container" id="services" style="text-align: center; background: #fafafa; max-width: 100%;">
-      <h2 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.4;">Our Architecture
-      </h2>
-      <div class="services-grid">
-        <div class="service-card reveal">
-          <div class="card-title">Content Sprints</div>
-          <div class="card-desc">High-speed content production for brands that need to move as fast as the market.
+        <div class="speedo-container reveal" id="speedoContainer">
+          <div class="gauge-base">
+            <div class="gauge-segments"></div>
+            <div class="gauge-needle" id="speedoNeedle"></div>
+          </div>
+          <div class="gauge-center">
+            <div class="speed-value" id="speedValue">0</div>
+            <div class="speed-label">Current Creativity</div>
           </div>
         </div>
-        <div class="service-card reveal">
-          <div class="card-title">Conversion Engine</div>
-          <div class="card-desc">Websites and landing pages made with one goal: turning attention into revenue.
+      </section>
+
+      <div class="marquee-wrap">
+        <div class="marquee-content" id="accContent">CONTENT STRATEGY &bull; CINEMA DESIGN &bull; GROWTH ENGINEERING
+          &bull; BRAND ARCHITECTURE &bull; </div>
+      </div>
+
+      <!-- HOME TEASER: Selected Works -->
+      <section class="section-container" id="work-teaser" style="padding-bottom: 0;">
+        <div class="reveal">
+          <h2 class="sub-clamp">Selected Works</h2>
+        </div>
+        <div class="marquee-wrap" style="margin-top: 40px;">
+          <div class="marquee-row" id="heroRow">
+            <div class="work-card"><img src="ad1.jpg"></div>
+            <div class="work-card"><img src="ad2.jpg"></div>
+            <div class="work-card"><img src="ad3.jpg"></div>
+            <div class="work-card"><img src="ad4.JPG"></div>
+            <div class="work-card"><img src="ad5.jpg"></div>
+            <div class="work-card"><img src="ad6.jpg"></div>
+            <!-- Duplicated for infinite loop -->
+            <div class="work-card"><img src="ad1.jpg"></div>
+            <div class="work-card"><img src="ad2.jpg"></div>
+            <div class="work-card"><img src="ad3.jpg"></div>
+            <div class="work-card"><img src="ad4.JPG"></div>
+            <div class="work-card"><img src="ad5.jpg"></div>
+            <div class="work-card"><img src="ad6.jpg"></div>
           </div>
         </div>
-        <div class="service-card reveal">
-          <div class="card-title">Social Mastery</div>
-          <div class="card-desc">360° management of your brand's digital footprint across all relevant platforms.</div>
+        <div style="text-align: center; margin-top: 50px;">
+          <a href="#work" class="btn-contact" style="
+            background: linear-gradient(135deg, var(--brand), #ff7a45);
+            color: #fff;
+            border: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 18px 44px;
+            border-radius: 50px;
+            box-shadow: 0 12px 35px rgba(234, 92, 31, 0.3);
+            transition: all 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+          " onmouseover="this.style.transform='translateY(-3px) scale(1.03)'; this.style.boxShadow='0 18px 50px rgba(234,92,31,0.4)';"
+            onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 12px 35px rgba(234,92,31,0.3)';">Explore
+            Work Library &rarr;</a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- INSTAGRAM STAGE -->
-    <section class="section-container">
-      <div class="reveal">
-        <h2 class="sub-clamp">The Daily Pulse</h2>
-      </div>
-      <div class="ig-stage">
-        <div class="ig-glass">
-          <div class="ig-pill">Instagram - @addit.ltd</div>
-          <h4>Cinematic Reels &<br>Performance Strategy</h4>
-        </div>
-        <div class="ig-mask"></div>
-        <div class="ig-real">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/addit.ltd"
-            data-instgrm-version="14" style="width:100%; max-width:640px; margin:auto; background: #000; border:0;">
-          </blockquote>
-        </div>
-        <script async src="https://www.instagram.com/embed.js"></script>
-      </div>
-    </section>
-
-    <!-- APPROACH -->
-    <section class="section-container" id="about">
-      <div class="reveal">
-        <h2 class="title-clamp">Built the Way <br> Designers Think</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 80px; align-items: center;">
-          <p style="font-size: 1.4rem; opacity: 0.8; line-height: 1.6;">We don't just build sites and systems ; we
-            architect
-            experiences. Everything
-            , is engineered to connect with the people at the other end of the screen.</p>
-          <div class="work-card"
-            style="height: 300px; border-radius: 32px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.1);">
-            <img src="https://github.com/DPS-cyber/Add-it/blob/main/DAM.png?raw=true">
+      <!-- SERVICES -->
+      <section class="section-container" id="services"
+        style="text-align: center; background: #fafafa; max-width: 100%;">
+        <h2 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.4;">Our Architecture
+        </h2>
+        <div class="services-grid">
+          <div class="service-card reveal">
+            <div class="card-title">Content Sprints</div>
+            <div class="card-desc">High-speed content production for brands that need to move as fast as the market.
+            </div>
+          </div>
+          <div class="service-card reveal">
+            <div class="card-title">Conversion Engine</div>
+            <div class="card-desc">Websites and landing pages made with one goal: turning attention into revenue.
+            </div>
+          </div>
+          <div class="service-card reveal">
+            <div class="card-title">Social Mastery</div>
+            <div class="card-desc">360° management of your brand's digital footprint across all relevant platforms.
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <!-- INSTAGRAM STAGE -->
+      <section class="section-container">
+        <div class="reveal">
+          <h2 class="sub-clamp">The Daily Pulse</h2>
+        </div>
+        <div class="ig-stage">
+          <div class="ig-glass">
+            <div class="ig-pill">Instagram - @addit.ltd</div>
+            <h4>Cinematic Reels &<br>Performance Strategy</h4>
+          </div>
+          <div class="ig-mask"></div>
+          <div class="ig-real">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/addit.ltd"
+              data-instgrm-version="14" style="width:100%; max-width:480px; margin:auto; background: #000; border:0;">
+            </blockquote>
+          </div>
+          <script async src="https://www.instagram.com/embed.js"></script>
+        </div>
+      </section>
+
+      <!-- APPROACH -->
+      <section class="section-container" id="about">
+        <div class="reveal">
+          <h2 class="title-clamp">Built the Way <br> Designers Think</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 80px; align-items: center;">
+            <p style="font-size: 1.4rem; opacity: 0.8; line-height: 1.6;">We don't just build sites and systems ; we
+              architect
+              experiences. Everything
+              , is engineered to connect with the people at the other end of the screen.</p>
+            <div class="work-card"
+              style="height: 300px; border-radius: 32px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.1);">
+              <img src="https://github.com/DPS-cyber/Add-it/blob/main/DAM.png?raw=true">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div> <!-- END HOME VIEW -->
+
+    <!-- WORK VIEW (Slide) -->
+    <div id="work-view" class="page-view">
+      <section class="section-container" style="padding-top: 120px;">
+        <div class="reveal" style="text-align: center;">
+          <h2 class="sub-clamp">Work Library</h2>
+          <p style="opacity: 0.5; margin-top: 10px;">Deep-diving into high-performance builds.</p>
+        </div>
+
+        <div class="work-search-wrap">
+          <input type="text" id="workSearch" class="work-search-input" placeholder="Search projects...">
+        </div>
+
+        <div class="filter-keys">
+          <div class="filter-key active" data-filter="all">All</div>
+          <div class="filter-key" data-filter="reel">Reels</div>
+          <div class="filter-key" data-filter="photo">Photos</div>
+          <div class="filter-key" data-filter="web">Web</div>
+          <div class="filter-key" data-filter="strategy">Strategy</div>
+        </div>
+
+        <div class="work-grid" id="fullWorkGrid">
+          <div class="work-card reveal" data-tags="reel cinema performance content"><img src="ad1.jpg"></div>
+          <div class="work-card reveal" data-tags="strategy brand scaling systems"><img src="ad2.jpg"></div>
+          <div class="work-card reveal" data-tags="web conversion design engine"><img src="ad3.jpg"></div>
+          <div class="work-card reveal" data-tags="photo growth architecture ads social"><img src="ad4.JPG"></div>
+          <div class="work-card reveal" data-tags="photo premium visual aesthetics art"><img src="ad5.jpg"></div>
+          <div class="work-card reveal" data-tags="web dynamic velocity tech innovation"><img src="ad6.jpg"></div>
+          <!-- More Work Items -->
+          <div class="work-card reveal" data-tags="reels content velocity"><img src="ad1.jpg"></div>
+          <div class="work-card reveal" data-tags="strategy design layout grid"><img src="ad2.jpg"></div>
+          <div class="work-card reveal" data-tags="photo ai automation logic"><img src="ad3.jpg"></div>
+        </div>
+      </section>
+    </div> <!-- END WORK VIEW -->
   </main>
 
   <!-- CHAT UI -->
@@ -1558,47 +1881,10 @@
     </div>
   </footer>
 
-  <script src="main.js"></script>
   <script src="chat.js"></script>
   <script src="form.js"></script>
 
-  <!-- Inline Hamburger Menu Script -->
-  <script>
-    (function () {
-      function initHamburger() {
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
 
-        if (!hamburger || !navMenu) {
-          console.error('❌ Hamburger elements not found');
-          return;
-        }
-
-        console.log('✅ Hamburger initialized');
-
-        hamburger.addEventListener('click', function (e) {
-          e.preventDefault();
-          console.log('🍔 Clicked!');
-          this.classList.toggle('active');
-          navMenu.classList.toggle('show');
-        });
-
-        navMenu.querySelectorAll('a').forEach(function (link) {
-          link.addEventListener('click', function () {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('show');
-          });
-        });
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHamburger);
-      } else {
-        initHamburger();
-      }
-    })();
-  </script>
 </body>
 
 </html>
-
