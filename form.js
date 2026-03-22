@@ -9,6 +9,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("contactOverlay");
   const closeBtn = document.getElementById("closeOverlay");
 
+  // Open Overlay logic
+  const openBtns = document.querySelectorAll(".nav-cta, .mobile-cta, .btn-contact");
+  openBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const href = btn.getAttribute("href");
+      if (href === "#contact" || btn.classList.contains("btn-contact")) {
+        // Only prevent default if we're handling it as an overlay
+        // main.js also handles this, but this is a backup/direct handler
+        if (overlay) {
+          overlay.classList.add("show");
+          document.body.style.overflow = "hidden";
+          e.preventDefault();
+        }
+      }
+    });
+  });
+
   // Dropdown Handling
   const dropTrig = document.getElementById("dropTrig");
   const dropMenu = document.getElementById("dropMenu");
