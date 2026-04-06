@@ -23,17 +23,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasLoadedBefore = localStorage.getItem("siteLoaded");
 
     if (hasLoadedBefore) {
-      // Returning user: Ultra-fast feel (0.3s)
+      // Returning user: Instant (0.05s total feel)
       let progress = 0;
       const interval = setInterval(() => {
-        progress += 50;
+        progress += 100; // Complete in 1 step
         if (percentEl) percentEl.textContent = progress;
         if (barEl) barEl.style.width = progress + "%";
         if (progress >= 100) {
           clearInterval(interval);
           finishLoading();
         }
-      }, 10);
+      }, 50);
       return;
     }
 
@@ -60,6 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
       { id: "ad5", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad5.jpg?raw=true" },
       { id: "ad6", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad6.jpg?raw=true" }
     ]);
+
+    // Force finish if loading takes too long (Safety first)
+    setTimeout(() => {
+      if (!localStorage.getItem("siteLoaded")) {
+        console.log("Loading timed out - starting site anyway");
+        finishLoading();
+      }
+    }, 2000);
   };
   startPreloader();
 
@@ -281,13 +289,18 @@ document.addEventListener("DOMContentLoaded", () => {
               el.classList.add('play');
               const runProcess = () => {
                 if (window.instgrm) {
-                  window.instgrm.Embeds.process();
+                  try {
+                    window.instgrm.Embeds.process();
+                  } catch (e) {
+                    console.warn("Instagram process throttled:", e.message);
+                  }
                 } else {
-                  setTimeout(runProcess, 200);
+                  // Wait for script to be ready
+                  setTimeout(runProcess, 300);
                 }
               };
               runProcess();
-            }, 1500);
+            }, 1000); // Trigger slightly earlier for better engagement
           }
 
           masterObserver.unobserve(el);
