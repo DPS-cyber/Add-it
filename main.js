@@ -52,13 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     queue.loadManifest([
-      { id: "logo", src: "https://github.com/DPS-cyber/Add-it/blob/main/logo.png?raw=true" },
-      { id: "ad1", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad1.jpg?raw=true" },
-      { id: "ad2", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad2.jpg?raw=true" },
-      { id: "ad3", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad3.jpg?raw=true" },
-      { id: "ad4", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad4.JPG?raw=true" },
-      { id: "ad5", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad5.jpg?raw=true" },
-      { id: "ad6", src: "https://github.com/DPS-cyber/Add-it/blob/main/ad6.jpg?raw=true" }
+      { id: "logo", src: "logo.png" },
+      { id: "ad1", src: "ad1.jpg" },
+      { id: "ad2", src: "ad2.jpg" },
+      { id: "ad3", src: "ad3.jpg" },
+      { id: "ad4", src: "ad4.JPG" },
+      { id: "ad5", src: "ad5.jpg" },
+      { id: "ad6", src: "ad6.jpg" }
     ]);
 
     // Force finish if loading takes too long (Safety first)
