@@ -7,7 +7,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Webflow-Style Progressive Preloader
-  // 1. PreloadJS & One-Time Load Optimization
   const startPreloader = () => {
     const percentEl = document.getElementById("loaderPercent");
     const barEl = document.getElementById("loaderBar");
@@ -77,10 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Hamburger Menu Toggle Function
   const initHamburgerMenu = () => {
-    if (!hamburger || !navMenu) {
-      console.log('Hamburger or navMenu not found');
-      return;
-    }
+    if (!hamburger || !navMenu) return;
 
     hamburger.addEventListener('click', () => {
       hamburger.classList.toggle('active');
@@ -105,18 +101,17 @@ document.addEventListener("DOMContentLoaded", () => {
     initHamburgerMenu();
     initCursor();
     initWorkSearch();
+    initLightbox();
 
-    // Only init tilt on desktop
     if (!isMobile) {
       initTilt();
     }
 
-    // Initialize Marquees
     initMarquee({ el: document.getElementById('heroRow'), speed: isMobile ? 1 : 1.5 });
     initM("accContent", 2);
   };
 
-  // Header Scroll Progress & Sticky State
+  // 2. Scroll Progress & Header State
   window.addEventListener('scroll', () => {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -124,26 +119,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const header = document.querySelector('header');
     if (header) {
       header.style.setProperty('--scroll-progress', scrolled + '%');
-      if (winScroll > 50) {
-        header.classList.add('header-scrolled');
-      } else {
-        header.classList.remove('header-scrolled');
-      }
+      if (winScroll > 50) header.classList.add('header-scrolled');
+      else header.classList.remove('header-scrolled');
     }
   });
 
-
-
-  // 3. SPA ROUTER & History API
+  // 3. SPA ROUTER
   const wipe = document.getElementById("page-wipe");
   const views = document.querySelectorAll(".page-view");
-  const homeView = document.getElementById("home-view");
   const workView = document.getElementById("work-view");
 
   const switchPage = (viewId, push = true, sectionId = "") => {
     if (!wipe) return;
     
-    // If we're already on the correct view, just scroll to section
     const currentView = Array.from(views).find(v => v.classList.contains("active"));
     const targetView = document.getElementById(viewId + "-view");
     
@@ -153,35 +141,20 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Otherwise, do the wipe
     wipe.classList.remove("exit");
     wipe.classList.add("active");
 
     setTimeout(() => {
-      // Swapping Views
       views.forEach(v => v.classList.remove("active"));
       if (targetView) {
         targetView.classList.add("active");
-        
-        if (sectionId) {
-          scrollToSection(sectionId);
-        } else {
-          window.scrollTo(0, 0);
-        }
+        if (sectionId) scrollToSection(sectionId);
+        else window.scrollTo(0, 0);
       }
-
-      // Exit Wipe
       wipe.classList.remove("active");
       wipe.classList.add("exit");
-      
-      // Update History
-      if (push) {
-        updateHistory(viewId, sectionId);
-      }
-
-      // Re-trigger reveal animations for the new view
+      if (push) updateHistory(viewId, sectionId);
       initObservers();
-
       setTimeout(() => wipe.classList.remove("exit"), 600);
     }, 600);
   };
@@ -191,82 +164,49 @@ document.addEventListener("DOMContentLoaded", () => {
     if (target) {
       const headerH = window.innerWidth <= 768 ? 80 : 100;
       const targetPos = target.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: targetPos - headerH - 40,
-        behavior: "smooth"
-      });
+      window.scrollTo({ top: targetPos - headerH - 40, behavior: "smooth" });
     }
   };
 
   const updateHistory = (view, section = "") => {
     let path = view === "home" ? "/" : "/" + view;
-    if (section && section !== "home") {
-        // We use the section id as the path for sections on home
-        path = "/" + section.replace("#", "");
-    }
+    if (section && section !== "home") path = "/" + section.replace("#", "");
     history.pushState({ view: view, section: section }, "", path);
   };
 
-  // Listen for Browser Back/Forward
   window.addEventListener("popstate", (e) => {
-    if (e.state) {
-        switchPage(e.state.view, false, e.state.section);
-    } else {
-        // Fallback to URL parsing
-        const path = window.location.pathname.replace("/", "") || "home";
-        // Simple logic for known sections
-        if (["services", "about", "contact"].includes(path)) {
-            switchPage("home", false, path);
-        } else {
-            switchPage(path, false);
-        }
+    if (e.state) switchPage(e.state.view, false, e.state.section);
+    else {
+      const path = window.location.pathname.replace("/", "") || "home";
+      if (["services", "about", "contact"].includes(path)) switchPage("home", false, path);
+      else switchPage(path, false);
     }
   });
 
-  // Handle Initial Load
   const initialPath = window.location.pathname.replace("/", "") || "home";
   if (initialPath === "work") {
     views.forEach(v => v.classList.remove("active"));
     workView.classList.add("active");
   } else if (["services", "about", "contact"].includes(initialPath)) {
-    // Start on home but scroll to section
     setTimeout(() => switchPage("home", false, initialPath), 500);
   }
 
-  // Intercept Navigation
   document.querySelectorAll('a[href^="#"], .nav-cta, .btn-contact, #work-teaser a[href="#work"]').forEach(link => {
     link.addEventListener("click", (e) => {
       const href = link.getAttribute("href");
       if (!href || href === "#") return;
-
       e.preventDefault();
       if (hamburger) hamburger.classList.remove("active");
       if (navMenu) navMenu.classList.remove("show");
-
       const sectionId = href.replace("#", "");
-      
-      // Determine if it's a view switch or a section switch
-      if (sectionId === "work") {
-        switchPage("work");
-      } else if (sectionId === "home") {
-        switchPage("home");
-      } else if (sectionId === "contact") {
-        // Handle contact overlay directly
+      if (sectionId === "work") switchPage("work");
+      else if (sectionId === "home") switchPage("home");
+      else if (sectionId === "contact") {
         const overlay = document.getElementById("contactOverlay");
-        if (overlay) {
-            overlay.classList.add("show");
-            document.body.style.overflow = "hidden";
-        }
-      } else {
-        // Internal section (services, about, etc.)
-        switchPage("home", true, sectionId);
-      }
+        if (overlay) { overlay.classList.add("show"); document.body.style.overflow = "hidden"; }
+      } else switchPage("home", true, sectionId);
     });
   });
-
-
-  // 4. Custom Cursor (Desktop Only) - Moved to initCursor function
-
 
   // 5. Unified Intersection Observer
   function initObservers() {
@@ -274,35 +214,21 @@ document.addEventListener("DOMContentLoaded", () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const el = entry.target;
-
-          if (el.classList.contains('reveal')) {
-            el.classList.add('active');
-          }
-
-          if (el.classList.contains('speedo-container')) {
-            initAccelerator(); // Trigger on scroll
-          }
-
+          if (el.classList.contains('reveal')) el.classList.add('active');
+          if (el.classList.contains('speedo-container')) initAccelerator();
           if (el.classList.contains('ig-stage')) {
             el.classList.add('active');
             setTimeout(() => {
               el.classList.add('play');
               const runProcess = () => {
                 if (window.instgrm) {
-                  try {
-                    window.instgrm.Embeds.process();
-                  } catch (e) {
-                    console.warn("Instagram process throttled:", e.message);
-                  }
-                } else {
-                  // Wait for script to be ready
-                  setTimeout(runProcess, 300);
-                }
+                  try { window.instgrm.Embeds.process(); }
+                  catch (e) { console.warn("Instagram process throttled:", e.message); }
+                } else setTimeout(runProcess, 300);
               };
               runProcess();
-            }, 1000); // Trigger slightly earlier for better engagement
+            }, 1000);
           }
-
           masterObserver.unobserve(el);
         }
       });
@@ -313,36 +239,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 6. Portfolio Search & Tag Engine
+  // 6. Portfolio Search
   function initWorkSearch() {
     const searchInput = document.getElementById("workSearch");
     const grid = document.getElementById("fullWorkGrid");
     const keys = document.querySelectorAll(".filter-key");
     if (!grid) return;
-
     const cards = grid.querySelectorAll(".work-card");
     let activeFilter = "all";
 
     const performFilter = () => {
       const term = searchInput ? searchInput.value.toLowerCase().trim() : "";
-      
       cards.forEach(card => {
         const tags = card.getAttribute("data-tags") ? card.getAttribute("data-tags").toLowerCase() : "";
         const matchesSearch = tags.includes(term) || term === "";
         const matchesKey = activeFilter === "all" || tags.includes(activeFilter);
-
-        if (matchesSearch && matchesKey) {
-          card.classList.remove("hidden");
-        } else {
-          card.classList.add("hidden");
-        }
+        if (matchesSearch && matchesKey) card.classList.remove("hidden");
+        else card.classList.add("hidden");
       });
     };
 
-    if (searchInput) {
-      searchInput.addEventListener("input", performFilter);
-    }
-
+    if (searchInput) searchInput.addEventListener("input", performFilter);
     keys.forEach(key => {
       key.addEventListener("click", () => {
         keys.forEach(k => k.classList.remove("active"));
@@ -355,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initTilt() {
     document.querySelectorAll('.work-card').forEach(card => {
-      // Mouse move (Desktop)
       card.addEventListener('mousemove', (e) => {
         if (window.innerWidth <= 768) return;
         const rect = card.getBoundingClientRect();
@@ -363,23 +279,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const rx = (y - rect.height / 2) / 10, ry = (rect.width / 2 - x) / 10;
         card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`;
       });
-
-      // Touch move (Mobile - Attention Grabbing)
-      card.addEventListener('touchmove', (e) => {
-        const touch = e.touches[0];
-        const rect = card.getBoundingClientRect();
-        const x = touch.clientX - rect.left, y = touch.clientY - rect.top;
-        if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
-        const rx = (y - rect.height / 2) / 15, ry = (rect.width / 2 - x) / 15;
-        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.01, 1.01, 1.01)`;
-      }, { passive: true });
-
       card.addEventListener('mouseleave', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)');
-      card.addEventListener('touchend', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)');
     });
   }
-
-  // Dropdown logic removed (moved to form.js)
 });
 
 function initAccelerator() {
@@ -389,12 +291,8 @@ function initAccelerator() {
   if (!needle || !valueEl || !speedoContainer || speedoContainer.dataset.animated) return;
   speedoContainer.dataset.animated = "true";
 
-  // Initial max position animation
   setTimeout(() => {
-    // Initial max position
     needle.style.transform = 'translateX(-50%) rotate(75deg)';
-
-    // Animate counter
     let count = 0;
     const target = 100;
     const duration = 2500;
@@ -403,24 +301,16 @@ function initAccelerator() {
     const updateCount = (currentTime) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-
-      // Easing function (outQuart)
       const easedProgress = 1 - Math.pow(1 - progress, 4);
       count = Math.floor(easedProgress * target);
-
       valueEl.textContent = count + '%';
-
-      if (progress < 1) {
-        requestAnimationFrame(updateCount);
-      } else {
-        // TRIGGER FIRE EFFECT
+      if (progress < 1) requestAnimationFrame(updateCount);
+      else {
         setTimeout(() => {
           speedoContainer.classList.add('ignite');
           valueEl.textContent = 'MAX!!';
           valueEl.style.color = '#ff0000';
           valueEl.style.textShadow = '0 0 20px #ff0000';
-
-          // Final needle jitter position push
           needle.style.transform = 'translateX(-50%) rotate(85deg)';
         }, 300);
       }
@@ -432,7 +322,6 @@ function initAccelerator() {
 function initMarquee({ el, speed, reverse = false }) {
   if (!el || el.dataset.running) return;
   el.dataset.running = "1";
-  // Content already duplicated in HTML for heroRow for better performance
   let x = 0;
   const animate = () => {
     x += reverse ? speed : -speed;
@@ -444,7 +333,6 @@ function initMarquee({ el, speed, reverse = false }) {
   animate();
 }
 
-// Kinetic Marquee Logic (Redesign Port)
 function initM(id, s) {
   const el = document.getElementById(id);
   if (!el || el.dataset.running) return;
@@ -461,9 +349,7 @@ function initM(id, s) {
 }
 
 function initMagneticButtons() {
-  // Skip magnetic effect on mobile
   if (window.innerWidth <= 768) return;
-
   document.querySelectorAll('.nav-cta, .social-link, .contact-form button').forEach(el => {
     el.addEventListener('mousemove', function (e) {
       const rect = this.getBoundingClientRect();
@@ -474,18 +360,7 @@ function initMagneticButtons() {
   });
 }
 
-// ===== VALENTINE PROMO LOGIC (TEST MODE) =====
-
-(function () {
-  const banner = document.getElementById("promoBanner");
-  if (!banner) return;
-
-  document.body.classList.add("promo-active");
-})();
-
-// 10. Custom Cursor Logic
 function initCursor() {
-  // 4. Custom Cursor (Desktop Only)
   if (window.innerWidth > 768) {
     const cursor = document.querySelector(".cursor");
     if (cursor) {
@@ -505,3 +380,35 @@ function initCursor() {
   }
 }
 
+function initLightbox() {
+  const overlay = document.getElementById("lightbox-overlay");
+  const content = document.getElementById("lightbox-content");
+  const closeBtn = document.getElementById("lightbox-close");
+  if (!overlay || !content || !closeBtn) return;
+
+  const closeLightbox = () => {
+    overlay.classList.remove("active");
+    const video = content.querySelector("video");
+    if (video) video.pause();
+    setTimeout(() => { content.innerHTML = ""; }, 400); 
+  };
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay || e.target === closeBtn || e.target === content) closeLightbox();
+  });
+
+  document.querySelectorAll(".work-grid .work-card img, .work-grid .work-card video").forEach(el => {
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      content.innerHTML = "";
+      const clone = el.cloneNode(true);
+      if (clone.tagName === 'VIDEO') {
+        clone.controls = true;
+        clone.muted = false;
+      }
+      content.appendChild(clone);
+      overlay.classList.add("active");
+      if (clone.tagName === 'VIDEO') clone.play().catch(err => console.log("Play interrupted"));
+    });
+  });
+}
