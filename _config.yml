@@ -4,9 +4,9 @@ description: >-
 email: addit.brand@gmail.com
 instagram_username: addit.ltd
 author: Add-It
-keywords: "add it,add-it,add-it creatives,addit,add it hyderabad,add it agency, digital marketing agency india, creative agency, graphic design agency, branding agency, social media marketing, content creation agency, website design agency, marketing agency for startups"
-baseurl: "pages.dev/" # the subpath of your site, e.g. /blog
-url: "https://add-it.pages.dev/" # the base hostname & protocol for your site, e.g. http://example.com
+keywords: "add it agency, digital marketing agency india, creative agency, graphic design agency, branding agency, social media marketing, content creation agency, website design agency, marketing agency for startups"
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://add-it.pages.dev" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
 markdown: kramdown
