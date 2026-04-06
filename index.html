@@ -770,14 +770,36 @@
     }
 
     .work-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 30px;
+      column-count: 3;
+      column-gap: 30px;
       margin-top: 40px;
     }
 
+    @media (max-width: 1024px) {
+      .work-grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .work-grid {
+        column-count: 1;
+      }
+    }
+
     .work-grid .work-card {
+      break-inside: avoid;
+      margin-bottom: 30px;
+      aspect-ratio: auto;
+      display: block;
+      width: 100%;
       transition: all 0.6s var(--transit);
+    }
+
+    .work-grid .work-card img,
+    .work-grid .work-card video {
+      height: auto;
+      display: block;
     }
 
     .work-grid .work-card.hidden {
@@ -848,14 +870,16 @@
       }
     }
 
-    .work-card img {
+    .work-card img,
+    .work-card video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.6s var(--transit);
     }
 
-    .work-card:hover img {
+    .work-card:hover img,
+    .work-card:hover video {
       transform: scale(1.08);
     }
 
@@ -1560,9 +1584,71 @@
 
     ::selection {
       background-color: rgba(234, 92, 31, 0.18);
-      /* transparent orange */
       color: var(--brand);
-      /* text becomes brand color */
+    }
+
+    /* LIGHTBOX SYSTEM - PREMIUM POPS */
+    #lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      z-index: 1000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    #lightbox-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: #fff;
+      font-size: 3.5rem;
+      cursor: pointer;
+      font-weight: 200;
+      transition: transform 0.3s;
+      z-index: 1000001;
+    }
+
+    #lightbox-close:hover {
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    #lightbox-content {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+      transform: scale(0.9) translateY(40px);
+      transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+      position: relative;
+      background: #000;
+      max-width: 90vw;
+    }
+
+    #lightbox-overlay.active #lightbox-content {
+      transform: scale(1) translateY(0);
+    }
+
+    #lightbox-content img,
+    #lightbox-content video {
+      display: block;
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
+    .work-grid .work-card {
+      cursor: zoom-in;
     }
   </style>
 </head>
@@ -1598,8 +1684,7 @@
 
   <header>
     <div class="shimmer"></div>
-    <a href="#home" class="logo"><img src="logo.png"
-        alt="Logo"></a>
+    <a href="#home" class="logo"><img src="logo.png" alt="Logo"></a>
     <nav id="navMenu">
       <a href="#work">Work</a>
       <a href="#services">Services</a>
@@ -1768,16 +1853,29 @@
         </div>
 
         <div class="work-grid" id="fullWorkGrid">
-          <div class="work-card reveal" data-tags="reel cinema performance content"><img src="ad1.jpg"></div>
-          <div class="work-card reveal" data-tags="strategy brand scaling systems"><img src="ad2.jpg"></div>
-          <div class="work-card reveal" data-tags="web conversion design engine"><img src="ad3.jpg"></div>
+          <!-- Column 1 Flow -->
+          <div class="work-card reveal" data-tags="photo cinema performance content"><img src="ad1.jpg"></div>
+          <div class="work-card reveal" data-tags="reels content velocity"><video src="r1.mp4" autoplay loop muted
+              playsinline></video></div>
+          <div class="work-card reveal" data-tags="photo brand scaling systems"><img src="ad2.jpg"></div>
+
+          <!-- Column 2 Flow -->
+          <div class="work-card reveal" data-tags="photo conversion design engine"><img src="ad3.jpg"></div>
+          <div class="work-card reveal" data-tags="reel design layout grid"><video src="r2.mp4" autoplay loop muted
+              playsinline></video></div>
           <div class="work-card reveal" data-tags="photo growth architecture ads social"><img src="ad4.JPG"></div>
+
+          <!-- Column 3 Flow -->
+          <div class="work-card reveal" data-tags="reel ai automation logic"><video src="r3.mp4" autoplay loop muted
+              playsinline></video></div>
           <div class="work-card reveal" data-tags="photo premium visual aesthetics art"><img src="ad5.jpg"></div>
-          <div class="work-card reveal" data-tags="web dynamic velocity tech innovation"><img src="ad6.jpg"></div>
-          <!-- More Work Items -->
-          <div class="work-card reveal" data-tags="reels content velocity"><img src="ad1.jpg"></div>
-          <div class="work-card reveal" data-tags="strategy design layout grid"><img src="ad2.jpg"></div>
-          <div class="work-card reveal" data-tags="photo ai automation logic"><img src="ad3.jpg"></div>
+          <div class="work-card reveal" data-tags="reel ai automation logic"><video src="r4.mp4" autoplay loop muted
+              playsinline></video></div>
+
+          <!-- Final Scattered Row -->
+          <div class="work-card reveal" data-tags="reel ai automation logic"><video src="song.mp4" autoplay loop muted
+              playsinline></video></div>
+          <div class="work-card reveal" data-tags="photo dynamic velocity tech innovation"><img src="ad6.jpg"></div>
         </div>
       </section>
     </div> <!-- END WORK VIEW -->
@@ -1881,6 +1979,11 @@
       </div>
     </div>
   </footer>
+
+  <div id="lightbox-overlay">
+    <div id="lightbox-close">&times;</div>
+    <div id="lightbox-content"></div>
+  </div>
 
   <script src="chat.js"></script>
   <script src="form.js"></script>
